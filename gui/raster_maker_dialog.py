@@ -165,7 +165,7 @@ class RasterMakerDialog(QDialog, FORM_CLASS):
             'GRASS_REGION_CELLSIZE_PARAMETER' : 0, 
             'GRASS_REGION_PARAMETER' : None, 
             'map' : layer_tmp, 
-            'null' : 1, 
+            'null' : 0, 
             'output' : self.tmp_filename, 
             'setnull' : '' })
         return res['output']
