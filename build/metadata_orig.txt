@@ -1,0 +1,47 @@
+# This file contains metadata for your plugin.
+
+# This file should be included when you package your plugin.# Mandatory items:
+
+[general]
+name=Tree Belt Designer
+qgisMinimumVersion=3.10
+description=Design tree and shrub belts
+version=1.0.0
+author=Jakub Skowroński, Maciej Nowak, Jakub Nowosad
+email=skowronski.jakub97@gmail.com maciej.nowak@amu.edu.pl
+
+about=This plugin provides knowledge for design the future tree belt network in terms of the estimation of potential insolation within agricultural landscape. The design process bases on the user library containing attributes of tree and shrub species. The process is also supported by the soil type data, the parcel-based layout, and the digital surface model (DSM). The outcome provides the modified DSM extended with user’s tree belt project. Based on the modified DSM, the potential insolation and contrary to insolation - the shading effect caused by tree belt network is possible to estimate using plugins of different GIS software. Moreover, the outcome allows to estimate the insolation/shading effect within another arrangement of tree and shrub groups or single individuals planned by the user in his project.<br><br>Icons from https://www.flaticon.com/authors/dinosoftlabs
+
+tracker=https://github.com/skowronskij/tree-belt-designer/issues
+repository=https://github.com/skowronskij/tree-belt-designer
+# End of mandatory metadata
+
+# Recommended items:
+
+hasProcessingProvider=no
+# Uncomment the following line and add your changelog:
+# changelog=
+
+# Tags are comma separated with spaces allowed
+tags=python
+
+homepage=https://github.com/skowronskij/tree-belt-designer
+category=Plugins
+icon=icon.png
+# experimental flag
+experimental=False
+
+# deprecated flag (applies to the whole plugin, not just a single version)
+deprecated=False
+
+# Since QGIS 3.8, a comma separated list of plugins to be installed
+# (or upgraded) can be specified.
+# Check the documentation for more information.
+# plugin_dependencies=
+
+Category of the plugin: Raster, Vector, Database or Web
+# category=
+
+# If the plugin can run on QGIS Server.
+server=False
+

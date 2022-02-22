@@ -1,0 +1,17 @@
+<RCC>
+    <qresource prefix="/plugins/tree-belt-designer" >
+        <file>icons/icon.png</file>
+    </qresource>
+    <qresource prefix="/plugins/tree-belt-designer" >
+        <file>icons/tree.png</file>
+    </qresource>
+    <qresource prefix="/plugins/tree-belt-designer" >
+        <file>icons/tree_add.png</file>
+    </qresource>
+    <qresource prefix="/plugins/tree-belt-designer" >
+        <file>icons/tree_registry.png</file>
+    </qresource>
+    <qresource prefix="/plugins/tree-belt-designer" >
+        <file>icons/tree_raster.png</file>
+    </qresource>
+</RCC>

@@ -1,0 +1,19 @@
+#!/bin/bash
+if [ "$1" == "--help" ] || [ "$1" == "-h" ]; then
+    #Zasady korzystania ze skryptu
+    echo "Aby stworzyć domyślny zipfile, użyj jednego argumentu 'default'"
+    echo "np. $ ./pack default"
+    exit;
+fi
+
+cat build/metadata_orig.txt > metadata.txt
+cat build/pb_tool.cfg > pb_tool_temp.cfg
+
+#Usunięcie __pycache__
+find * -depth -name '__pycache__' -type d -exec rm -rf "{}" \;
+mv build/pb_tool.cfg pb_tool.cfg
+pb_tool zip --config_file pb_tool_temp.cfg
+mv pb_tool.cfg build/pb_tool.cfg 
+#Cofnięcie metadata.txt do stanu początkowego oraz usunięcie tymczasowego configu
+cp build/metadata_orig.txt metadata.txt
+rm -f pb_tool_temp.cfg
