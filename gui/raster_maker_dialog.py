@@ -42,12 +42,14 @@ class RasterMakerDialog(QDialog, FORM_CLASS):
     def create_raster(self):
         dem_layer = self.mlCbDem.currentLayer()
         if not dem_layer:
-            iface.messageBar().pushMessage('Tree Belt Designer', 'DEM layer not provided', Qgis.Critical, 4)
+            iface.messageBar().pushMessage('Tree Belt Designer',
+                                           'DEM layer not provided', Qgis.Critical, 4)
             return
-        
+
         path = self.fwFilePath.filePath()
         if not path:
-            iface.messageBar().pushMessage('Tree Belt Designer', f'Save path not provided', Qgis.Critical, 4)
+            iface.messageBar().pushMessage('Tree Belt Designer',
+                                           f'Save path not provided', Qgis.Critical, 4)
             return
 
         # bin_buffer_layer = self._create_buffer_raster(binary=True)
@@ -57,14 +59,16 @@ class RasterMakerDialog(QDialog, FORM_CLASS):
         buffer_layer = self._create_buffer_raster()
         if not buffer_layer:
             return
-        res = self.calculate_raster(buffer_layer, dem_layer, '"dem@1" + "ras@1"', path)
+        res = self.calculate_raster(
+            buffer_layer, dem_layer, '"dem@1" + "ras@1"', path)
         if res != QgsRasterCalculator.Success:
-            iface.messageBar().pushMessage('Tree Belt Designer', f'Raster generate error: {res}', Qgis.Critical, 4)
+            iface.messageBar().pushMessage('Tree Belt Designer',
+                                           f'Raster generate error: {res}', Qgis.Critical, 4)
             return
 
         filename = ntpath.basename(path)
         QgsProject.instance().removeMapLayers([buffer_layer.id()])
-        #HOTFIX: na widnows, do innego fixu później
+        # HOTFIX: na widnows, do innego fixu później
         try:
             os.remove(self.tmp_filename)
         except PermissionError:
@@ -76,14 +80,15 @@ class RasterMakerDialog(QDialog, FORM_CLASS):
         ras.ref = 'ras@1'
         ras.raster = layer
         ras.bandNumber = 1
-        
+
         dem = QgsRasterCalculatorEntry()
         dem.ref = 'dem@1'
         dem.raster = dem_layer
         dem.bandNumber = 1
 
         entries = [ras, dem]
-        calc = QgsRasterCalculator(query, path, 'GTiff', dem_layer.extent(), dem_layer.width(), dem_layer.height(), entries)
+        calc = QgsRasterCalculator(query, path, 'GTiff', dem_layer.extent(
+        ), dem_layer.width(), dem_layer.height(), entries)
         return calc.processCalculation()
 
     def _create_buffer_layer(self) -> QgsVectorLayer:
@@ -93,7 +98,8 @@ class RasterMakerDialog(QDialog, FORM_CLASS):
         if not self._validate_trees_layer(trees_layer):
             return
         epsg = trees_layer.sourceCrs()
-        new_layer = QgsVectorLayer(f'Polygon?field=height:double(20,5)', 'trees_buffer', 'memory')
+        new_layer = QgsVectorLayer(
+            f'Polygon?field=height:double(20,5)', 'trees_buffer', 'memory')
         new_layer.setCrs(epsg)
         feats = []
         for f in trees_layer.getFeatures():
@@ -110,12 +116,13 @@ class RasterMakerDialog(QDialog, FORM_CLASS):
     def _validate_trees_layer(self, layer: QgsVectorLayer) -> bool:
         for field in REQUIRED_FIELDS:
             if field not in layer.fields().names():
-                iface.messageBar().pushMessage('Tree Belt Designer', 'Required fields not found in trees and shrubs layer', Qgis.Critical, 4)
+                iface.messageBar().pushMessage('Tree Belt Designer',
+                                               'Required fields not found in trees and shrubs layer', Qgis.Critical, 4)
                 return False
         return True
 
     def _create_buffer_raster(self, binary=False) -> QgsVectorLayer:
-        
+
         def fix_extent(ext: str):
             ext = ext.replace(',', '')
             ext_list = ext.split(' ')
@@ -123,52 +130,56 @@ class RasterMakerDialog(QDialog, FORM_CLASS):
 
         dem_layer = self.mlCbDem.currentLayer()
         if not dem_layer:
-            iface.messageBar().pushMessage('Tree Belt Designer', 'DEM layer not provided', Qgis.Critical, 4)
+            iface.messageBar().pushMessage('Tree Belt Designer',
+                                           'DEM layer not provided', Qgis.Critical, 4)
             return
 
         buffer_layer = self._create_buffer_layer()
         if not buffer_layer:
             return
-        extent = fix_extent(dem_layer.extent().asWktCoordinates()) + ' [EPSG:2180]'
-        res = processing.run('gdal:rasterize', 
-            { 'BURN' : 0, 
-            'DATA_TYPE' : 5, 
-            'EXTENT' : extent, 
-            'EXTRA' : '', 
-            'FIELD' : None if binary else 'height', 
-            'HEIGHT' : dem_layer.height(), 
-            'INIT' : None, 
-            'INPUT' : buffer_layer.metadataUri(), 
-            'INVERT' : False, 
-            'NODATA' : -9999, 
-            'OPTIONS' : '', 
-            'OUTPUT' : 'TEMPORARY_OUTPUT', 
-            'UNITS' : 0, 
-            'WIDTH' : dem_layer.width() })
+        extent = fix_extent(
+            dem_layer.extent().asWktCoordinates()) + ' [EPSG:2180]'
+        res = processing.run('gdal:rasterize',
+                             {'BURN': 0,
+                              'DATA_TYPE': 5,
+                              'EXTENT': extent,
+                              'EXTRA': '',
+                              'FIELD': None if binary else 'height',
+                              'HEIGHT': dem_layer.height(),
+                              'INIT': None,
+                              'INPUT': buffer_layer.metadataUri(),
+                              'INVERT': False,
+                              'NODATA': -9999,
+                              'OPTIONS': '',
+                              'OUTPUT': 'TEMPORARY_OUTPUT',
+                              'UNITS': 0,
+                              'WIDTH': dem_layer.width()})
         filled_no_data = self._replace_no_data(res['OUTPUT'])
         QgsProject.instance().removeMapLayers([buffer_layer.id()])
-        layer = QgsRasterLayer(filled_no_data, 'buffer_raster_bin' if binary else 'buffer_raster')
+        layer = QgsRasterLayer(
+            filled_no_data, 'buffer_raster_bin' if binary else 'buffer_raster')
         layer.setCrs(dem_layer.crs())
         QgsProject.instance().addMapLayer(layer, False)
         return layer
 
     def _replace_no_data(self, layer_tmp: str) -> str:
         _, self.tmp_filename = tempfile.mkstemp()
-        res = processing.run('grass7:r.null', 
-            { '-c' : False, 
-            '-f' : False, 
-            '-i' : False, 
-            '-n' : False, 
-            '-r' : False, 
-            'GRASS_RASTER_FORMAT_META' : '', 
-            'GRASS_RASTER_FORMAT_OPT' : '', 
-            'GRASS_REGION_CELLSIZE_PARAMETER' : 0, 
-            'GRASS_REGION_PARAMETER' : None, 
-            'map' : layer_tmp, 
-            'null' : 0, 
-            'output' : self.tmp_filename, 
-            'setnull' : '' })
+        res = processing.run('grass7:r.null',
+                             {'-c': False,
+                              '-f': False,
+                              '-i': False,
+                              '-n': False,
+                              '-r': False,
+                              'GRASS_RASTER_FORMAT_META': '',
+                              'GRASS_RASTER_FORMAT_OPT': '',
+                              'GRASS_REGION_CELLSIZE_PARAMETER': 0,
+                              'GRASS_REGION_PARAMETER': None,
+                              'map': layer_tmp,
+                              'null': 0,
+                              'output': self.tmp_filename,
+                              'setnull': ''})
         return res['output']
+
 
 """
 
