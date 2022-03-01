@@ -108,7 +108,8 @@ class RasterMakerDialog(QDialog, FORM_CLASS):
             new_f.setGeometry(buffer_geom)
             new_f.setAttributes([f['height']])
             feats.append(new_f)
-        new_layer.dataProvider().addFeatures(feats)
+        features_sorted_by_height = sorted(feats, key=lambda f: f['height'])
+        new_layer.dataProvider().addFeatures(features_sorted_by_height)
         new_layer.reload()
         QgsProject.instance().addMapLayer(new_layer, False)
         return new_layer
