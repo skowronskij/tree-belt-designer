@@ -12,6 +12,7 @@ from .resources import *
 from .gui.start_adding_points_dialog import AddPointsDialog
 from .gui.raster_maker_dialog import RasterMakerDialog
 from .utils.add_trees_tool import AddTreesTool
+from .utils.add_multiple_trees_tool import AddMultipleTreesTool
 from .db.db_handler import DB_PATH, db_handler
 
 
@@ -46,6 +47,7 @@ class TreeBeltDesigner:
         self.actions = []
         self.menu = self.tr(u'&Tree Belt Designer')
         self.add_trees_tool = AddTreesTool(self)
+        self.add_multiple_trees_tool = AddMultipleTreesTool(self)
 
     def tr(self, message):
         """Get the translation for a string using Qt translation API.
@@ -152,6 +154,16 @@ class TreeBeltDesigner:
         self.add_trees_tool.setAction(self.add_trees_action)
         self.add_points_dialog = AddPointsDialog(self.add_trees_tool)
 
+        self.add_multiple_trees_action = self.add_action(
+            ':/plugins/potential_isolation_designer/icons/tree_add.png',
+            text=self.tr(u'Tree belt designer multiple'),
+            callback=self.turn_add_multiple_trees_tool,
+            checkable=True,
+            parent=self.iface.mainWindow())
+        self.add_multiple_trees_tool.setAction(self.add_multiple_trees_action)
+        self.add_multiple_points_dialog = AddPointsDialog(
+            self.add_multiple_trees_tool)
+
         self.add_make_raster = self.add_action(
             ':/plugins/potential_isolation_designer/icons/tree_raster.png',
             text=self.tr(u'Potential DSM designer'),
@@ -208,6 +220,16 @@ class TreeBeltDesigner:
             self.iface.mapCanvas().setMapTool(self.add_trees_tool)
         else:
             self.iface.mapCanvas().unsetMapTool(self.add_trees_tool)
+
+    def turn_add_multiple_trees_tool(self, toggled: bool):
+        if toggled:
+            result = self.add_multiple_points_dialog.exec()
+            if result != 1:
+                self.add_trees_action.setChecked(False)
+                return
+            self.iface.mapCanvas().setMapTool(self.add_multiple_trees_tool)
+        else:
+            self.iface.mapCanvas().unsetMapTool(self.add_multiple_trees_tool)
 
     def turn_raster_maker(self, toggled: bool):
         result = self.make_raster_dialog.exec()
