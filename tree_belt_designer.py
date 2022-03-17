@@ -9,7 +9,7 @@ from qgis.core import QgsVectorLayer, QgsProject, Qgis
 # Initialize Qt resources from file resources.py
 from .resources import *
 # Import the code for the dialog
-from .gui.start_adding_points_dialog import AddPointsDialog
+from .gui.config_dialog import ConfigDialog
 from .gui.raster_maker_dialog import RasterMakerDialog
 from .utils.add_trees_tool import AddTreesTool
 from .utils.add_multiple_trees_tool import AddMultipleTreesTool
@@ -48,6 +48,8 @@ class TreeBeltDesigner:
         self.menu = self.tr(u'&Tree Belt Designer')
         self.add_trees_tool = AddTreesTool(self)
         self.add_multiple_trees_tool = AddMultipleTreesTool(self)
+        self.config_dialog = ConfigDialog(
+            [self.add_trees_tool, self.add_multiple_trees_tool])
 
     def tr(self, message):
         """Get the translation for a string using Qt translation API.
@@ -145,24 +147,28 @@ class TreeBeltDesigner:
     def initGui(self):
         """Create the menu entries and toolbar icons inside the QGIS GUI. MANDATORY METHOD"""
 
-        self.add_trees_action = self.add_action(
+        self.add_trees_menu = self.add_action(
             ':/plugins/potential_isolation_designer/icons/tree_add.png',
             text=self.tr(u'Tree belt designer'),
-            callback=self.turn_add_trees_tool,
-            checkable=True,
-            parent=self.iface.mainWindow())
-        self.add_trees_tool.setAction(self.add_trees_action)
-        self.add_points_dialog = AddPointsDialog(self.add_trees_tool)
+            parent=self.iface.mainWindow()
+        )
+        self.set_add_trees_menu()
 
-        self.add_multiple_trees_action = self.add_action(
-            ':/plugins/potential_isolation_designer/icons/tree_add.png',
-            text=self.tr(u'Tree belt designer multiple'),
-            callback=self.turn_add_multiple_trees_tool,
-            checkable=True,
-            parent=self.iface.mainWindow())
-        self.add_multiple_trees_tool.setAction(self.add_multiple_trees_action)
-        self.add_multiple_points_dialog = AddPointsDialog(
-            self.add_multiple_trees_tool)
+        # self.add_trees_action = self.add_action(
+        #     ':/plugins/potential_isolation_designer/icons/tree_add.png',
+        #     text=self.tr(u'Tree belt designer'),
+        #     callback=self.turn_add_trees_tool,
+        #     checkable=True,
+        #     parent=self.iface.mainWindow())
+        # self.add_trees_tool.setAction(self.add_trees_action)
+
+        # self.add_multiple_trees_action = self.add_action(
+        #     ':/plugins/potential_isolation_designer/icons/tree_add.png',
+        #     text=self.tr(u'Tree belt designer multiple'),
+        #     callback=self.turn_add_multiple_trees_tool,
+        #     checkable=True,
+        #     parent=self.iface.mainWindow())
+        # self.add_multiple_trees_tool.setAction(self.add_multiple_trees_action)
 
         self.add_make_raster = self.add_action(
             ':/plugins/potential_isolation_designer/icons/tree_raster.png',
@@ -177,6 +183,41 @@ class TreeBeltDesigner:
             parent=self.iface.mainWindow())
         self.set_trees_registry_menu()
 
+    def set_add_trees_menu(self):
+
+        self.add_trees_button = self.iface.pluginToolBar().widgetForAction(self.add_trees_menu)
+        self.add_trees_button.setPopupMode(QToolButton.InstantPopup)
+        self.add_trees_button.setMenu(QMenu())
+
+        add_trees_menu = self.add_trees_button.menu()
+
+        add_trees_config_action = add_trees_menu.addAction(
+            'Tree belt designer - settings')
+        add_trees_config_action.triggered.connect(self.config_dialog.exec)
+
+        add_trees_action = self.add_action(
+            ':/plugins/potential_isolation_designer/icons/tree_add.png',
+            text=self.tr(u'Tree belt designer - add single object'),
+            callback=self.turn_add_trees_tool,
+            checkable=True,
+            parent=self.iface.mainWindow(),
+            add_to_menu=False,
+            add_to_toolbar=False)
+        add_trees_menu.addAction(add_trees_action)
+        self.add_trees_tool.setAction(add_trees_action)
+
+        add_multiple_trees_action = self.add_action(
+            ':/plugins/potential_isolation_designer/icons/tree_add.png',
+            text=self.tr(u'Tree belt designer - add multiple objects'),
+            callback=self.turn_add_multiple_trees_tool,
+            checkable=True,
+            parent=self.iface.mainWindow(),
+            add_to_menu=False,
+            add_to_toolbar=False)
+
+        add_trees_menu.addAction(add_multiple_trees_action)
+        self.add_multiple_trees_tool.setAction(add_multiple_trees_action)
+
     def set_trees_registry_menu(self):
         self.trees_registry_button = self.iface.pluginToolBar(
         ).widgetForAction(self.trees_registry)
@@ -186,16 +227,19 @@ class TreeBeltDesigner:
         trees_registry_menu = self.trees_registry_button.menu()
 
         open_registry_menu = trees_registry_menu.addAction(
-            'Edit tree and shrub library')
+            'Edit tree and shrub library'
+        )
         open_registry_menu.triggered.connect(self.turn_trees_register)
 
         update_registry_action = trees_registry_menu.addAction(
-            'Update tree and shrub library from csv')
+            'Update tree and shrub library from csv'
+        )
         update_registry_action.triggered.connect(
             self.update_trees_registry_from_csv)
 
         download_registry_action = trees_registry_menu.addAction(
-            'Download the structure of tree and shrub library')
+            'Download the structure of tree and shrub library'
+        )
         download_registry_action.triggered.connect(self.download_db_structure)
 
     def unload(self):
@@ -213,20 +257,12 @@ class TreeBeltDesigner:
 
     def turn_add_trees_tool(self, toggled: bool):
         if toggled:
-            result = self.add_points_dialog.exec()
-            if result != 1:
-                self.add_trees_action.setChecked(False)
-                return
             self.iface.mapCanvas().setMapTool(self.add_trees_tool)
         else:
             self.iface.mapCanvas().unsetMapTool(self.add_trees_tool)
 
     def turn_add_multiple_trees_tool(self, toggled: bool):
         if toggled:
-            result = self.add_multiple_points_dialog.exec()
-            if result != 1:
-                self.add_trees_action.setChecked(False)
-                return
             self.iface.mapCanvas().setMapTool(self.add_multiple_trees_tool)
         else:
             self.iface.mapCanvas().unsetMapTool(self.add_multiple_trees_tool)

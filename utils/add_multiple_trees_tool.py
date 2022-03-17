@@ -105,8 +105,8 @@ class AddMultipleTreesTool(QgsMapToolIdentify):
         self.soil_field_name = field_name
 
     def identify_soil(self):
-        feature_request = QgsFeatureRequest(
-            self.final_line.asGeometry().boundingBox())
+        line_geom = self.final_line.asGeometry()
+        feature_request = QgsFeatureRequest(line_geom.boundingBox())
 
         for f in self.soil_layer.getFeatures(feature_request):
             self.open_add_new_feature_dialog([], f)
@@ -124,7 +124,8 @@ class AddMultipleTreesTool(QgsMapToolIdentify):
         super(AddMultipleTreesTool, self).deactivate()
         self.final_line.reset(QgsWkbTypes.LineGeometry)
         self.temp_line.reset(QgsWkbTypes.LineGeometry)
-        self.locator = None
-        self.trees_layer = None
-        self.soil_layer = None
-        self.roads_layer = None
+        self.snapping_point.reset(QgsWkbTypes.PointGeometry)
+        # self.locator = None
+        # self.trees_layer = None
+        # self.soil_layer = None
+        # self.roads_layer = None

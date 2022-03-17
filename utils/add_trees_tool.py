@@ -15,8 +15,7 @@ class AddTreesTool(QgsMapToolIdentify):
         self.parent = parent
         self.locator = None
 
-        self.temp_point = QgsRubberBand(
-            iface.mapCanvas(), QgsWkbTypes.PointGeometry)
+        self.temp_point = QgsRubberBand(iface.mapCanvas(), QgsWkbTypes.PointGeometry)
         self.temp_point.setColor(QColor('green'))
         self.temp_point.setIcon(QgsRubberBand.ICON_X)
         self.temp_point.setWidth(3)
@@ -104,7 +103,7 @@ class AddTreesTool(QgsMapToolIdentify):
     def deactivate(self):
         super(AddTreesTool, self).deactivate()
         self.temp_point.reset(QgsWkbTypes.PointGeometry)
-        self.locator = None
-        self.trees_layer = None
-        self.soil_layer = None
-        self.roads_layer = None
+        # self.locator = None
+        # self.trees_layer = None
+        # self.soil_layer = None
+        # self.roads_layer = None

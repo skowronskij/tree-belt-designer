@@ -1,6 +1,5 @@
 import os
 import sqlite3
-from turtle import width
 
 from typing import List
 from qgis.PyQt import uic
@@ -45,9 +44,7 @@ class AddTreeDialog(QDialog, FORM_CLASS):
         self.__connect_singals()
 
     def __connect_singals(self):
-        pass
         self.buttonBox.accepted.connect(self._pass_data)
-        # self.cbTreeOptimum.currentTextChanged.connect(self._fill_add_data)
 
     def fill_data(self):
         try:
@@ -92,11 +89,11 @@ class AddTreeDialog(QDialog, FORM_CLASS):
                                                'Tree width is greater than line length', Qgis.Critical, 4)
                 return
 
-            distance_between = width
+            distance_between = 0.0
             while distance_between < line_length:
                 point = self.line_geom.interpolate(distance_between)
                 self.points.append(point.asPoint())
-                distance_between += width
+                distance_between += 1.85*width
 
         if self.species_result == 1:
             for point in self.points:

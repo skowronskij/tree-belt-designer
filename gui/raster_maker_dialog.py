@@ -111,7 +111,7 @@ class RasterMakerDialog(QDialog, FORM_CLASS):
         features_sorted_by_height = sorted(feats, key=lambda f: f['height'])
         new_layer.dataProvider().addFeatures(features_sorted_by_height)
         new_layer.reload()
-        QgsProject.instance().addMapLayer(new_layer, False)
+        QgsProject.instance().addMapLayer(new_layer)
         return new_layer
 
     def _validate_trees_layer(self, layer: QgsVectorLayer) -> bool:
@@ -156,7 +156,7 @@ class RasterMakerDialog(QDialog, FORM_CLASS):
                               'UNITS': 0,
                               'WIDTH': dem_layer.width()})
         filled_no_data = self._replace_no_data(res['OUTPUT'])
-        QgsProject.instance().removeMapLayers([buffer_layer.id()])
+        # QgsProject.instance().removeMapLayers([buffer_layer.id()])
         layer = QgsRasterLayer(
             filled_no_data, 'buffer_raster_bin' if binary else 'buffer_raster')
         layer.setCrs(dem_layer.crs())
