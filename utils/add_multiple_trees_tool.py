@@ -75,17 +75,12 @@ class AddMultipleTreesTool(QgsMapToolIdentify):
         self.set_locator()
 
         if e.button() == Qt.LeftButton:
-            # results = self.identify_soil(e, self.soil_layer)
-            # if not results:
-            #     return
-            # feature = results[0].mFeature
             self.final_line.addPoint(e.snapPoint())
             self.temp_line.addPoint(e.snapPoint())
         elif e.button() == Qt.RightButton:
             self.identify_soil()
             self.final_line.reset(QgsWkbTypes.LineGeometry)
             self.temp_line.reset(QgsWkbTypes.LineGeometry)
-            # self.open_add_new_feature_dialog(e.mapPoint(), feature)
 
     def open_add_new_feature_dialog(self, points, feature: QgsFeature):
         result = 0
@@ -125,7 +120,3 @@ class AddMultipleTreesTool(QgsMapToolIdentify):
         self.final_line.reset(QgsWkbTypes.LineGeometry)
         self.temp_line.reset(QgsWkbTypes.LineGeometry)
         self.snapping_point.reset(QgsWkbTypes.PointGeometry)
-        # self.locator = None
-        # self.trees_layer = None
-        # self.soil_layer = None
-        # self.roads_layer = None

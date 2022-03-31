@@ -69,8 +69,10 @@ class AddTreeDialog(QDialog, FORM_CLASS):
     def _gather_trees_names(self):
         comboboxes = {'Optimum': self.cbTreeOptimum,
                       'Medium': self.cbTreeMedium, 'Low': self.cbTreeLow}
-        return [{'name': cb.currentText(), 'type': type} for type, cb in comboboxes.items()
-                if cb.currentText() or cb.currentText() != 'No trees or schrubs available']
+        return [{'name': cb.currentText(), 'type': type}
+                for type, cb in comboboxes.items()
+                if cb.currentText()
+                or cb.currentText() != 'No trees or schrubs available']
 
     def _pass_data(self):
         names = self._gather_trees_names()

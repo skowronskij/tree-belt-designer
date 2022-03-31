@@ -24,7 +24,6 @@ REQUIRED_FIELDS = [
 
 class RasterMakerDialog(QDialog, FORM_CLASS):
     def __init__(self, parent=None):
-        """Constructor."""
         super(RasterMakerDialog, self).__init__(parent)
         self.setupUi(self)
 
@@ -52,10 +51,6 @@ class RasterMakerDialog(QDialog, FORM_CLASS):
                                            f'Save path not provided', Qgis.Critical, 4)
             return
 
-        # bin_buffer_layer = self._create_buffer_raster(binary=True)
-        # self.calculate_raster(bin_buffer_layer, dem_layer, '"dem@1" * "ras@1"', path)
-        # new_dem = QgsRasterLayer(path, 'new_dem')
-
         buffer_layer = self._create_buffer_raster()
         if not buffer_layer:
             return
@@ -68,7 +63,6 @@ class RasterMakerDialog(QDialog, FORM_CLASS):
 
         filename = ntpath.basename(path)
         QgsProject.instance().removeMapLayers([buffer_layer.id()])
-        # HOTFIX: na widnows, do innego fixu później
         try:
             os.remove(self.tmp_filename)
         except PermissionError:
@@ -122,7 +116,7 @@ class RasterMakerDialog(QDialog, FORM_CLASS):
                 return False
         return True
 
-    def _create_buffer_raster(self, binary=False) -> QgsVectorLayer:
+    def _create_buffer_raster(self, binary=False) -> QgsRasterLayer:
 
         def fix_extent(ext: str):
             ext = ext.replace(',', '')
@@ -156,7 +150,6 @@ class RasterMakerDialog(QDialog, FORM_CLASS):
                               'UNITS': 0,
                               'WIDTH': dem_layer.width()})
         filled_no_data = self._replace_no_data(res['OUTPUT'])
-        # QgsProject.instance().removeMapLayers([buffer_layer.id()])
         layer = QgsRasterLayer(
             filled_no_data, 'buffer_raster_bin' if binary else 'buffer_raster')
         layer.setCrs(dem_layer.crs())
