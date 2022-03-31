@@ -1,0 +1,29 @@
+species_native_name,species_latin_name,target_height,target_width,shape,soil_type_optimum,soil_type_medium,soil_type_low,habitat,insolation_level,soil_moisture_level
+Common elder,Sambucus nigra L.,10,3,bushy erect,B;Bw;M;D,Dz,A,loamy and clay soils,photophilous / partial shade,moderately moist / moist 
+Silver birch,Betula pendula Roth.,25,8,spherical,A;B;,D,Dd;Dz;M,poor,photophilous,from dry to wet
+Bird cherry,Prunus avium L.,20,5,spherical,B;Bw;M;D,Dz;Dd,A,calcareous soils,partial shade,moderately moist
+Sessile oak,Quercus petraea (Matt.) Liebl.,40,15,wide ovoid,B,Bw;D,A;Dd;Dz;M,sandy loam soils,photophilous,moist
+Common oak,Quercus robur L.,50,3,irregular,B,Bw;D,A;Dd;Dz;M,calcareous soils,photophilous,from dry to wet
+Red dogwood,Cornus sanguinea L.,4,6,bushy erect,A;B;,D,Dd;Dz;M,from acidic to calcareous soils,photophilous,from dry to wet
+One-seeded hawthorn,Crataegus monogyna Jacq.,5,4,"weeping, pendulous",A;B;,D,Dd;Dz;M,alkaline soils,photophilous,dry
+Common hornbeam,Carpinus betulus L.,20,10,wide conical,B;Bw;M;D,Dz;Dd,A,calcareous soils,partial shade,moist
+Common pear,Pyrus communis L.,20,6,domed ,B;Bw;M;D,Dz;Dd,A,fertile soil,from photophilous to shade,moist
+Crab apple,Malus sylvestris,10,7,domed ,B;Bw;M;D,Dz;Dd,A,fertile soil,photophilous,moist
+European rowan,Sorbus aucuparia,20,7,ovoid,B;Bw;M;D,Dz;Dd,A,sandy soils,photophilous,from dry to moist 
+European ash,Fraxinus excelsior,35,3,ovoid,B;Bw;M;D;Dz;Dd,A,,fertile soil,from photophilous to shade,from moist to wet
+Highbush-Cranberry,Viburnum opulus L.,4,3,flat spherical,B;Bw;M;D;Dz;Dd,A,,humus soils,photophilous,moist
+Sycamore maple,Acer pseudoplatanus L.,20,18,obovate,B;Bw;D;Dz;Dd,M,A,alkaline soils,photophilous,moist
+Common maple,Acer campestre L.,20,18,ovoid,B;Bw;D;Dz;Dd,M,A,alkaline soils,partial shade,moderately moist
+Great maple,Acer platanoides L.,30,18,domed ,B;Bw;D;Dz;Dd,M,A,alkaline soils,partial shade,moist
+Common hazel,Corylus avellana L.,5,9,conical,B;Bw;M;D;Dz;Dd,,A,from acidic to calcareous soils,photophilous / partial shade,from dry to moist 
+Small-leaf lime,Tilia cordata Mill.,30,18,spherical,B;Bw;M;D,Dz;Dd,A,calcareous soils,partial shade / shade,moderately moist
+Broadleaf lime,Tilia platyphyllos Scop.,40,18,conical,B;Bw;M;D,Dz;Dd,A,calcareous soils,shade,moist
+Black alder,Alnus glutinosa (L.) Gaertn.,20,13,columnar,M;D;Dz;Dd,B;Bw,A,calcareous soils,partial shade,from moist to wet
+Gray alder,Alnus incana (L.) Moench,25,13,erect,M;D;Dz;Dd,B;Bw,A,from sandy to clay soils,photophilous / partial shade,moist
+Wild rose,Rosa canina L.,3,3,wide,B;Bw;M;D;Dz;Dd,A,,from clay to rocky soils,photophilous,dry
+Blackthorn,Prunus spinosa L.,8,2,erect,B;Bw;M;D;Dz;Dd,A,,"sandy, clay and rocky soils",photophilous,dry
+Silver poplar,Populus alba L.,35,10,wide spherical,A;B;Bw,M;D;Dz;Dd,,clay / calcareous solis,partial shade / shade,moist
+European spindletree,Euonymus europaeus L.,6,5,wide,B;Bw;M;D;Dz;Dd,,A,clay / calcareous solis,photophilous,moderately moist
+European white elm,Ulmus laevis Pall.,35,8,wide spherical,B;Bw;M;D,Dz;Dd,A,sandy / clay soils,photophilous,dry
+White willow,Salix alba L.,20,14,spherical,B;Bw;M;D;Dz;Dd,A,,sandy / gravel soils,partial shade,dry
+Pussy willow,Salix caprea L.,9,13,dangling,B;Bw;M;D;Dz;Dd,A,,sandy / clay soils,photophilous,moist
