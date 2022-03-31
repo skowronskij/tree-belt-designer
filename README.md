@@ -10,6 +10,7 @@ Moreover, the outcome allows to estimate the insolation/shading effect within an
 
 ## Example trees and shrub library
 Example CSV with data available here: https://github.com/skowronskij/tree-belt-designer/blob/main/examples/example_library.csv
+
 You can load it using `Update tree and shrub library` option in `Tree and shrub library designer` tool.
 
 **Example CSV delimiter `,`**
