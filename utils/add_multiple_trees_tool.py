@@ -1,6 +1,6 @@
 from qgis.PyQt.QtCore import Qt
 from qgis.PyQt.QtGui import QCursor, QPixmap, QColor
-from qgis.core import QgsWkbTypes, QgsVectorLayer, QgsFeature, QgsPointLocator, QgsProject, QgsFeatureRequest
+from qgis.core import QgsWkbTypes, QgsVectorLayer, QgsFeature, QgsPointLocator, QgsProject, QgsFeatureRequest, QgsGeometry
 from qgis.gui import QgsRubberBand, QgsMapToolIdentify
 from qgis.utils import iface
 
@@ -82,11 +82,15 @@ class AddMultipleTreesTool(QgsMapToolIdentify):
             self.final_line.reset(QgsWkbTypes.LineGeometry)
             self.temp_line.reset(QgsWkbTypes.LineGeometry)
 
-    def open_add_new_feature_dialog(self, points, feature: QgsFeature):
+    def open_add_new_feature_dialog(self, points, feature: QgsFeature, segment_geom: QgsGeometry):
         result = 0
         while result == 0:
             dialog = AddTreeDialog(
-                points, feature[self.soil_field_name], self.trees_layer, self.final_line.asGeometry())
+                points, 
+                feature[self.soil_field_name], 
+                self.trees_layer, 
+                segment_geom
+            )
             dialog.fill_data()
             result = dialog.exec()
 
@@ -104,7 +108,11 @@ class AddMultipleTreesTool(QgsMapToolIdentify):
         feature_request = QgsFeatureRequest(line_geom.boundingBox())
 
         for f in self.soil_layer.getFeatures(feature_request):
-            self.open_add_new_feature_dialog([], f)
+            line_segment = self.get_line_segment(f.geometry())
+            self.open_add_new_feature_dialog([], f, line_segment)
+
+    def get_line_segment(self, soil_feature_geom: QgsGeometry):
+        return self.final_line.asGeometry().intersection(soil_feature_geom)
 
     def set_locator(self):
         if self.roads_layer is not None:

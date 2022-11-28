@@ -154,22 +154,6 @@ class TreeBeltDesigner:
         )
         self.set_add_trees_menu()
 
-        # self.add_trees_action = self.add_action(
-        #     ':/plugins/potential_isolation_designer/icons/tree_add.png',
-        #     text=self.tr(u'Tree belt designer'),
-        #     callback=self.turn_add_trees_tool,
-        #     checkable=True,
-        #     parent=self.iface.mainWindow())
-        # self.add_trees_tool.setAction(self.add_trees_action)
-
-        # self.add_multiple_trees_action = self.add_action(
-        #     ':/plugins/potential_isolation_designer/icons/tree_add.png',
-        #     text=self.tr(u'Tree belt designer multiple'),
-        #     callback=self.turn_add_multiple_trees_tool,
-        #     checkable=True,
-        #     parent=self.iface.mainWindow())
-        # self.add_multiple_trees_tool.setAction(self.add_multiple_trees_action)
-
         self.add_make_raster = self.add_action(
             ':/plugins/potential_isolation_designer/icons/tree_raster.png',
             text=self.tr(u'Potential DSM designer'),
@@ -235,7 +219,8 @@ class TreeBeltDesigner:
             'Update tree and shrub library from csv'
         )
         update_registry_action.triggered.connect(
-            self.update_trees_registry_from_csv)
+            self.update_trees_registry_from_csv
+        )
 
         download_registry_action = trees_registry_menu.addAction(
             'Download the structure of tree and shrub library'
@@ -292,6 +277,8 @@ class TreeBeltDesigner:
 
         if new_data:
             db_handler.insert_new_rows(new_data)
+            self.iface.messageBar().pushMessage('Tree Belt Designer',
+                                    'Data added successfuly', Qgis.Success, 4)
         else:
             self.iface.messageBar().pushMessage('Tree Belt Designer',
                                                 'No data found in csv', Qgis.Warning, 4)
