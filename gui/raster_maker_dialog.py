@@ -105,7 +105,7 @@ class RasterMakerDialog(QDialog, FORM_CLASS):
         features_sorted_by_height = sorted(feats, key=lambda f: f['height'])
         new_layer.dataProvider().addFeatures(features_sorted_by_height)
         new_layer.reload()
-        QgsProject.instance().addMapLayer(new_layer)
+        QgsProject.instance().addMapLayer(new_layer, False)
         return new_layer
 
     def _validate_trees_layer(self, layer: QgsVectorLayer) -> bool:
@@ -132,8 +132,9 @@ class RasterMakerDialog(QDialog, FORM_CLASS):
         buffer_layer = self._create_buffer_layer()
         if not buffer_layer:
             return
-        extent = fix_extent(
-            dem_layer.extent().asWktCoordinates()) + ' [EPSG:2180]'
+
+        dem_epsg = dem_layer.crs().authid()
+        extent = fix_extent(dem_layer.extent().asWktCoordinates()) + f' [{dem_epsg}]'
         res = processing.run('gdal:rasterize',
                              {'BURN': 0,
                               'DATA_TYPE': 5,
@@ -150,8 +151,7 @@ class RasterMakerDialog(QDialog, FORM_CLASS):
                               'UNITS': 0,
                               'WIDTH': dem_layer.width()})
         filled_no_data = self._replace_no_data(res['OUTPUT'])
-        layer = QgsRasterLayer(
-            filled_no_data, 'buffer_raster_bin' if binary else 'buffer_raster')
+        layer = QgsRasterLayer(filled_no_data, 'buffer_raster_bin' if binary else 'buffer_raster')
         layer.setCrs(dem_layer.crs())
         QgsProject.instance().addMapLayer(layer, False)
         return layer
@@ -173,18 +173,3 @@ class RasterMakerDialog(QDialog, FORM_CLASS):
                               'output': self.tmp_filename,
                               'setnull': ''})
         return res['output']
-
-
-"""
-
-{ '-c' : False, '-f' : False, '-i' : False, '-n' : False, '-r' : False, 'GRASS_RASTER_FORMAT_META' : '', 'GRASS_RASTER_FORMAT_OPT' : '', 'GRASS_REGION_CELLSIZE_PARAMETER' : 0, 'GRASS_REGION_PARAMETER' : None, 'map' : '/tmp/processing_8995aaa2dcad49b58a3e449c41ad5942/d4001a6696044a2eb808655821e0fbe0/OUTPUT.tif', 'null' : 1, 'output' : 'TEMPORARY_OUTPUT', 'setnull' : '' }
-
-{ 'BURN' : 0, 'DATA_TYPE' : 5, 'EXTENT' : '349178.9017268746,349200.8050334647,470074.69803179876,470223.2857493622 [EPSG:2180]', 'EXTRA' : '', 'FIELD' : 'nmt_wys', 'HEIGHT' : 500, 'INIT' : None, 'INPUT' : 'MultiPolygon?crs=EPSG:2180&field=id:integer(-1,0)&field=nmt_wys:double(20,5)&uid={68c89983-38ca-4b98-8203-187e94cf4ae5}', 'INVERT' : False, 'NODATA' : -9999, 'OPTIONS' : '', 'OUTPUT' : 'TEMPORARY_OUTPUT', 'UNITS' : 0, 'WIDTH' : 500 }
-
-1. Stworzenie warstwy buforów
-2. Stworzenie 0/1 bufor raster 
-3. Stworzenie wys bufor rater
-4. Raster calc dem in * 0/1 bufor
-5. Raster calc dem in + wys bufor  
-
-"""
