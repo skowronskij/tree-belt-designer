@@ -6,7 +6,7 @@
 name=Tree Belt Designer
 qgisMinimumVersion=3.10
 description=Design tree and shrub belts
-version=1.1.0
+version=1.1.1
 author=Jakub Skowroński, Maciej Nowak, Jakub Nowosad
 email=skowronski.jakub97@gmail.com maciej.nowak@amu.edu.pl
 
@@ -24,6 +24,7 @@ changelog=1.0.1:
  - "Tree belt desginer" - window rename  
  - "Potential DSM designer" - fixed generated raster height when objects intersects
  - New tool: "Add multiple objects"
+ - Fixed wrong crs while generating output DSM
 
 # Tags are comma separated with spaces allowed
 tags=python
